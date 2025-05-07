@@ -1,0 +1,3 @@
+[submodule "情報基礎2/squash"]
+	path = 情報基礎2/squash
+	url = git@github.com:kota-yata/sfc22-squash.git
