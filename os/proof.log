@@ -1,0 +1,48 @@
+main: begin
+A: start
+A: lcounter: 10000000
+A: 100000000
+B: start
+B: lcounter: 10000000
+C: start
+C: lcounter: 10000000
+D: start
+D: lcounter: 10000000
+E: start
+E: lcounter: 10000000
+F: start
+F: lcounter: 10000000
+I: start
+I: lcounter: 10000000
+Okay, main() (our original thread) now waiting...
+H: start
+H: lcounter: 10000000
+G: start
+G: lcounter: 10000000
+J: start
+J: lcounter: 10000000
+J: 90000000
+A: 90000000
+J: 80000000
+B: 80000000
+J: 70000000
+D: 60000000
+D: 50000000
+H: 40000000
+D: 40000000
+A: 30000000
+G: 20000000
+F: 20000000
+I: 10000000
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+lcounter: 0
+gcounter: 0
+main: end

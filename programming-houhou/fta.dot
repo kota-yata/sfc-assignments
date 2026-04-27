@@ -1,0 +1,83 @@
+digraph FaultTree {
+  rankdir=TB;
+  fontsize=12;
+  node [fontname="Helvetica"];
+  edge [arrowhead=none];
+
+  top [shape=ellipse, label="Top Event:\nprocess_items fails or incorrect average"];
+
+  // Top OR gate
+  g_or [shape=diamond, label="OR"];
+  top -> g_or;
+
+  // High-level causes
+  conv_fail   [shape=plaintext, label="Conversion failure"];
+  div_zero    [shape=plaintext, label="Division by zero"];
+  iter_issues [shape=plaintext, label="Iterable/type issues"];
+  silent_wrong[shape=plaintext, label="Silent incorrect average"];
+  perf_fail   [shape=plaintext, label="Performance/operational failure"];
+
+  g_or -> conv_fail;
+  g_or -> div_zero;
+  g_or -> iter_issues;
+  g_or -> silent_wrong;
+  g_or -> perf_fail;
+
+  // Gates for categories
+  g_conv_or   [shape=diamond, label="OR"];
+  g_iter_or   [shape=diamond, label="OR"];
+  g_silent_or [shape=diamond, label="OR"];
+  g_perf_or   [shape=diamond, label="OR"];
+
+  conv_fail   -> g_conv_or;
+  iter_issues -> g_iter_or;
+  silent_wrong-> g_silent_or;
+  perf_fail   -> g_perf_or;
+
+  // Conversion failure leaves
+  e_non_numeric   [shape=box, label="Non-numeric string\n('abc', '', 'NaN')"];
+  e_floatlike_str [shape=box, label="Float-like string\n('3.14', '1e3')"];
+  e_mixed_types   [shape=box, label="Uncastable type\n(object, list, dict)"];
+
+  g_conv_or -> e_non_numeric;
+  g_conv_or -> e_floatlike_str;
+  g_conv_or -> e_mixed_types;
+
+  // Division by zero leaf
+  e_empty [shape=box, label="Empty data\nlen(data) == 0"];
+  div_zero -> e_empty;
+
+  // Iterable/type issues leaves
+  e_none   [shape=box, label="data is None / not iterable\nTypeError in for-loop"];
+  e_no_len [shape=box, label="Iterator/generator without len()\nTypeError at len(data)"];
+
+  g_iter_or -> e_none;
+  g_iter_or -> e_no_len;
+
+  // Silent incorrect average leaves
+  e_truncate_float [shape=box, label="Float items truncated by int()\nint(3.5) -> 3"];
+  e_bool_as_int    [shape=box, label="Booleans treated as ints\nTrue->1, False->0"];
+  e_outlier        [shape=box, label="Outlier large values\nskew mean unintentionally"];
+
+  g_silent_or -> e_truncate_float;
+  g_silent_or -> e_bool_as_int;
+  g_silent_or -> e_outlier;
+
+  // Performance leaves
+  e_large_data     [shape=box, label="Extremely large data\nlong runtime/memory"];
+  e_expensive_parse[shape=box, label="Expensive int() on complex items"];
+
+  g_perf_or -> e_large_data;
+  g_perf_or -> e_expensive_parse;
+
+  // Code-point annotations
+  edge [arrowhead=normal, style=dashed, color=gray50];
+  c_loop  [shape=note, label="for item in data"];
+  c_cast  [shape=note, label="int(item)"];
+  c_avg   [shape=note, label="total / len(data)"];
+
+  c_loop -> e_none;
+  c_cast -> g_conv_or;
+  c_avg  -> e_no_len;
+  c_avg  -> e_empty;
+}

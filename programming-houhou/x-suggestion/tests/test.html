@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X提案アプリ Tests</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      body { padding: 12px; }
+      .test-output { margin-top: 16px; border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #0f1217; }
+      .ok { color: #6af3c6; }
+      .ng { color: #ff6a8b; }
+      .case { margin: 4px 0; }
+      .summary { margin-top: 8px; font-weight: 700; }
+      .fixture { display:none; }
+    </style>
+  </head>
+  <body>
+    <!-- Minimal fixture so app.js can bind UI IDs safely -->
+    <div class="fixture">
+      <input id="promptInput" />
+      <button id="generateBtn"></button>
+      <button id="clearBtn"></button>
+      <div id="result"></div>
+      <div id="apiStatus"></div>
+      <input id="apiKey" />
+      <input id="forceMock" type="checkbox" />
+      <button id="saveSettings"></button>
+      <button id="clearSettings"></button>
+    </div>
+
+    <h1>X提案アプリ: Tests</h1>
+    <div id="report" class="test-output" aria-live="polite"></div>
+
+    <script src="../app.js"></script>
+    <script src="test.js"></script>
+  </body>
+  </html>
+

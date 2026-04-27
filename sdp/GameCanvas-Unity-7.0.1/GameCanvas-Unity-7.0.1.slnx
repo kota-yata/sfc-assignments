@@ -1,0 +1,10 @@
+﻿<Solution>
+  <Project Path="GameCanvas.Tests.Editor.csproj" />
+  <Project Path="GameCanvas.Editor.csproj" />
+  <Project Path="UnityBridge.Editor.csproj" />
+  <Project Path="GameCanvas.csproj" />
+  <Project Path="CsprojModifier.Editor.csproj" />
+  <Project Path="Game.csproj" />
+  <Project Path="GameCanvas.ScriptableObject.csproj" />
+  <Project Path="GameCanvas.Tests.csproj" />
+</Solution>
