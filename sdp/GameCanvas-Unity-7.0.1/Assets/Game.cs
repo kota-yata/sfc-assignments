@@ -10,42 +10,44 @@ using UnityEngine.InputSystem;
 /// </summary>
 public sealed class Game : GameBase
 {
-    int money;
-    const int CARD_TYPE = 10;
-    int[] card_count = new int [CARD_TYPE];
-    string[] card_name = {"A","B","C","D","E","F","G","H","I","J"};
-    bool isComplete;
-    int new_card ;
+    int ball_x;
+    int ball_y;
+    int ball_speed_x;
+    int ball_speed_y;
+    int player_x;
+    int player_y;
+    int player_w;
+    int player_h;
+    const int BLOCK_NUM = 50;
+    int[] block_x = new int[BLOCK_NUM];
+    int[] block_y = new int[BLOCK_NUM];
+    bool[] block_alive_flag = new bool[BLOCK_NUM];
+    int block_w = 64;
+    int block_h = 20;
+    int time;
 
     /// <summary>
     /// 初期化処理
     /// </summary>
     public override void InitGame()
     {
-        gc.ChangeCanvasSize(720, 1280);
-        ResetGame();
-    }
+        gc.SetResolution(640, 480);
+        ball_x = 0;
+        ball_y = 0;
+        ball_speed_x = 3;
+        ball_speed_y = 3;
+        player_x = 270;
+        player_y = 460;
+        player_w = 100;
+        player_h = 20;
 
-    public void ResetGame()
-    {
-        gc.SetRandomSeed((uint)gc.CurrentTimestamp*1024);
-	    money = 10000;
-	    for (int i = 0; i < CARD_TYPE; i++) {
-	    	card_count[i] = 0;
-	    }
-	    isComplete = false;
-	    new_card = -1;
-    }
-
-    public int GetNewCard()
-    {
-        new_card = gc.Random(5, 9);
-        int probability = gc.Random(0, 3);
-        if (probability == 0)
+        for (int i = 0; i < BLOCK_NUM; i++)
         {
-            new_card = gc.Random(0, 4);
+            block_x[i] = (i % 10) * block_w;
+            block_y[i] = (i / 10) * block_h;
+            block_alive_flag[i] = true;
         }
-        return new_card;
+        time = 0;
     }
 
     /// <summary>
@@ -53,15 +55,53 @@ public sealed class Game : GameBase
     /// </summary>
     public override void UpdateGame()
     {
-        if (gc.GetPointerFrameCount(0) >= 120) {
-            ResetGame();
-        } else if (gc.GetPointerFrameCount(0)==1 && ! isComplete) {
-            money -= 100;
-            new_card = GetNewCard();
-            card_count[new_card]++;
+        ball_x = ball_x + ball_speed_x;
+        ball_y = ball_y + ball_speed_y;
 
-            if (new_card <= 4 && card_count[new_card] >= 5) {
-                isComplete = true;
+        if (ball_x < 0)
+        {
+            ball_x = 0;
+            ball_speed_x = -ball_speed_x;
+        }
+
+        if (ball_y < 0)
+        {
+            ball_y = 0;
+            ball_speed_y = -ball_speed_y;
+        }
+
+        if (ball_x > 616)
+        {
+            ball_x = 616;
+            ball_speed_x = -ball_speed_x;
+        }
+
+        if (countBlock() != 0)
+        {
+            time++;
+        }
+
+        if (gc.GetPointerFrameCount(0) > 0)
+        {
+            player_x = (int)gc.GetPointerX(0) - player_w / 2;
+            player_y = (int)gc.GetPointerY(0) - player_h / 2;
+        }
+
+        for (int i = 0; i < BLOCK_NUM; i++)
+        {
+            if (block_alive_flag[i] && gc.CheckHitRect(ball_x, ball_y, 24, 24, block_x[i], block_y[i], block_w, block_h))
+            {
+                block_alive_flag[i] = false;
+                ball_speed_y = -ball_speed_y;
+            }
+        }
+
+        if (gc.CheckHitRect(ball_x, ball_y, 24, 24, player_x, player_y, player_w, player_h))
+        {
+            if (ball_speed_y > 0)
+            {
+                ball_y = player_y - 24;
+                ball_speed_y = -ball_speed_y;
             }
         }
     }
@@ -72,20 +112,43 @@ public sealed class Game : GameBase
     public override void DrawGame()
     {
         gc.ClearScreen();
-        gc.SetColor(0,0,0);
-        gc.SetFontSize(36);
-        gc.DrawString("money:"+money,60, 40);
 
-        if(new_card >= 0){
-        gc.DrawString("new:"+card_name[new_card],60, 80);
+        // 0番の画像を描画します
+        gc.DrawImage(GcImage.BlueSky, 0, 0);
+
+        gc.DrawImage(GcImage.BallYellow, ball_x, ball_y);
+
+        gc.SetColor(255, 0, 0);
+        for (int i = 0; i < BLOCK_NUM; i++)
+        {
+            if (block_alive_flag[i])
+            {
+                gc.FillRect(block_x[i], block_y[i], block_w, block_h);
+            }
         }
 
-        for(int i=0 ; i< CARD_TYPE ; i++){
-            gc.DrawString(card_name[i] + ":" + card_count[i],60, 120+i*40);
-        }
+        gc.SetColor(0, 0, 255);
+        gc.FillRect(player_x, player_y, player_w, player_h);
 
-        if(isComplete ){
-        gc.DrawString("complete!!",60, 520);
+        gc.SetColor(0, 0, 0);
+        gc.DrawString("time:" + time, 0, 100);
+
+        if (countBlock() == 0)
+        {
+            gc.DrawString("Clear!", 280, 240);
         }
+    }
+
+    int countBlock()
+    {
+        int num = 0;
+        for (int i = 0; i < BLOCK_NUM; i++)
+        {
+            if (block_alive_flag[i])
+            {
+                num++;
+            }
+        }
+        return num;
     }
 }
