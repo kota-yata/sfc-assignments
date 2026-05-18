@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sdp", "sdp", "{29F39BB7-A374-2605-1EA5-7581C2119CD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameCanvas-Unity-7.0.1", "GameCanvas-Unity-7.0.1", "{F817387C-1634-2531-7B40-712E7F573E19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCanvas.Tests.Editor", "sdp\GameCanvas-Unity-7.0.1\GameCanvas.Tests.Editor.csproj", "{FF8855F3-A742-C396-27EA-EBE0E65001A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF8855F3-A742-C396-27EA-EBE0E65001A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF8855F3-A742-C396-27EA-EBE0E65001A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF8855F3-A742-C396-27EA-EBE0E65001A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF8855F3-A742-C396-27EA-EBE0E65001A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F817387C-1634-2531-7B40-712E7F573E19} = {29F39BB7-A374-2605-1EA5-7581C2119CD3}
+		{FF8855F3-A742-C396-27EA-EBE0E65001A1} = {F817387C-1634-2531-7B40-712E7F573E19}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F7D8D0A1-B983-4AF3-837D-86A2E5D5283F}
+	EndGlobalSection
+EndGlobal
